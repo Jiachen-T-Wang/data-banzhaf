@@ -8,5 +8,5 @@ This repository provides an implementation of the paper [Data Banzhaf: A Robust 
 
 ## Requirements 
 
-The code is tested with Python 3.8 and PyTorch 1.12.1. The complete list of required packages are available in `requirement.txt', and can be installed with `pip install -r requirement.txt'. The code should be compatible with other versions of packages.
+The code is tested with Python 3.8 and PyTorch 1.12.1. The complete list of required packages are available in `requirement.txt`, and can be installed with `pip install -r requirement.txt`. The code should be compatible with other versions of packages.
 
