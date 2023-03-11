@@ -26,54 +26,9 @@ import config
 
 import pdb
 
-# sbatch sample_mnist.sh Banzhaf_GT Logistic 5 5000 0.11 8 1
-
-
 import argparse
 
 parser = argparse.ArgumentParser('')
-
-
-# python sample_for_value.py --dataset CIFAR10 --value_type Shapley_Perm --model_type SmallCNN --n_data 5 --n_val 5000 --n_sample 5 --n_repeat 5 --batch_size 32 --random_state 1 --flip_ratio 0
-
-# python sample_for_value.py --dataset $1 --value_type $2 --model_type $3 --n_data $4 --n_val $5 --n_sample $6 --n_repeat $7 --batch_size $8 --random_state $9 --flip_ratio ${10}
-
-# sbatch sample_for_value.sh CIFAR10 Shapley_Perm SmallCNN 2000 5000 4000 5 32 1 0
-
-# python sample_for_value.py --dataset Dog_vs_CatFeature --value_type Banzhaf_GT --model_type MLP --n_data 2000 --n_val 2000 --n_sample 2000 --n_repeat 5 --batch_size 32 --random_state 1 --flip_ratio 0
-
-# sbatch sample_for_value.sh Dog_vs_CatFeature Shapley_Perm Logistic 200 2000 5000 5 32 1 0
-
-
-# python sample_for_value.py --dataset covertype --value_type Banzhaf_GT --model_type Logistic --n_data 200 --n_val 2000 --n_sample 10000 --n_repeat 1 --flip_ratio 0.1 --random_state 1
-
-# python sample_for_value.py --dataset covertype --value_type LOO --model_type Logistic --n_data 200 --n_val 2000 --n_sample 10000 --n_repeat 1 --flip_ratio 0.1 --random_state 1
-
-# python sample_for_value.py --dataset covertype --value_type KNN --model_type Logistic --n_data 200 --n_val 2000 --n_sample 10000 --n_repeat 1 --flip_ratio 0.1 --random_state 1
-
-
-# python sample_for_value.py --dataset  --value_type $2 --model_type $3 --n_data $4 --n_val $5 --n_sample $6 --n_repeat $7 --batch_size $8 --lr $9 --random_state ${10} --flip_ratio ${11}
-
-# sbatch sample_for_value.sh covertype LOO 
-
-
-# python sample_for_value.py --dataset Dog_vs_CatFeature --value_type Banzhaf_GT --model_type MLP --n_data 2000 --n_val 2000 --n_sample 3 --n_repeat 5 --batch_size 128 --random_state 1 --flip_ratio 0.1 --debug
-
-
-# python sample_for_value.py --dataset MNIST --value_type Banzhaf_GT --model_type SmallCNN --n_data 500 --n_val 2000 --n_repeat 5 --n_sample 3 --batch_size 128 --flip_ratio 0.1 --random_state 1 --lr 0.001 --debug
-
-
-# python sample_for_value.py --dataset FMNIST --value_type Banzhaf_GT --model_type SmallCNN --n_data 500 --n_val 2000 --n_repeat 5 --n_sample 3 --batch_size 128 --flip_ratio 0.1 --random_state 1 --lr 0.001 --debug
-
-
-# python sample_for_value.py --dataset fraud --value_type Banzhaf_GT --model_type MLP --n_data 200 --n_val 2000 --n_repeat 5 --n_sample 3 --batch_size 32 --flip_ratio 0.1 --random_state 1 --lr 0.01 --debug
-
-
-# python sample_for_value.py --dataset CIFAR10 --value_type Banzhaf_GT --model_type SmallCNN --n_data 2000 --n_val 2000 --n_repeat 5 --n_sample 3 --batch_size 128 --flip_ratio 0.1 --random_state 1 --lr 0.001 --debug
-
-
-# python sample_for_value.py --dataset CIFAR10 --value_type Banzhaf_GT --model_type SmallCNN --n_data 5000 --n_val 2000 --n_repeat 5 --n_sample 3 --batch_size 128 --flip_ratio 0.1 --random_state 1 --lr 0.001 --debug
-
 
 
 parser.add_argument('--dataset', type=str)
@@ -127,18 +82,10 @@ utility_func_mult = lambda a, b, c, d: sample_utility_multiple(a, b, c, d, u_fun
 
 x_train, y_train, x_val, y_val = get_processed_data(dataset, n_data, n_val, flip_ratio)
 
-
-if args.debug: 
-    print(y_train[:20], y_val[:20])
-    print(np.unique(y_train, return_counts=True))
-    print(np.unique(y_val, return_counts=True))
-
-
 utility_func_args = (x_train, y_train, x_val, y_val)
 
 n_class = len(np.unique(y_val))
 sv_baseline = 1.0/n_class
-
 
 if(random_state != -1): 
     torch.manual_seed(random_state)
@@ -174,8 +121,6 @@ elif value_type == 'Banzhaf_GT':
 
 elif value_type == 'Shapley_GT':
     X_feature_test, y_feature_test = sample_utility_shapley_gt(n_sample, utility_func_mult, utility_func_args)
-
-
     y_feature_test = process_yfeature(y_feature_test)
     save_arg = {'X_feature': X_feature_test, 'y_feature': y_feature_test}
 
@@ -189,7 +134,6 @@ elif value_type == 'LOO':
 
 elif value_type == 'KNN':
     sv = knn_shapley(x_train, y_train, x_val, y_val, K=10)
-    # sv = knn_shapley(x_train, y_train, x_val[:200], y_val[:200], K=10)
     save_arg = {'knn': sv}
 
 save_arg['sv_baseline'] = sv_baseline

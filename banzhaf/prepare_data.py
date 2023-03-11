@@ -140,10 +140,6 @@ def get_data(dataset):
     elif dataset == 'MNIST':
         x_train, y_train, x_test, y_test = get_mnist()
     elif dataset == 'CIFAR10':
-        x_train, y_train, x_test, y_test = get_cifar()
-    elif dataset == 'Dog_vs_Cat':
-        x_train, y_train, x_test, y_test = get_dogcat()
-    elif dataset == 'Dog_vs_CatFeature':
         x_train, y_train, x_test, y_test = get_dogcatFeature()
     elif dataset == 'FMNIST':
         x_train, y_train, x_test, y_test = get_fmnist()

@@ -25,17 +25,9 @@ from utility_func import *
 from prepare_data import *
 import config
 
-# sbatch sample_mnist.sh Banzhaf_GT Logistic 5 5000 0.11 8 1
 
-# python check_weighted_acc.py --dataset covertype --value_type Shapley_Perm --model_type Logistic --n_data 200 --n_val 2000 --n_sample 10000 --flip_ratio 0.1 --random_state 1 --sigma 0
-
-# python applications.py --task mislabel_detect --dataset covertype --value_type Shapley_Perm --model_type Logistic --n_data 200 --n_val 2000 --n_sample 10000 --flip_ratio 0.1 --random_state 1 --sigma 0
-
-# python applications.py --task mislabel_detect --dataset CIFAR10 --value_type Banzhaf_GT --model_type SmallCNN --n_data 1000 --n_val 5000 --n_repeat 5 --n_sample 5000 --batch_size 128 --flip_ratio 0.1 --random_state 1 --sigma 0
-
-# python applications.py --task weighted_acc --dataset Dog_vs_CatFeature --value_type Shapley_Perm --model_type MLP --n_data 2000 --n_val 2000 --n_repeat 5 --n_sample 100000 --batch_size 128 --flip_ratio 0.1 --random_state 1
-
-# python applications.py --task mislabel_detect --dataset fraud --value_type Shapley_Perm --model_type MLP --n_data 200 --n_val 2000 --n_repeat 5 --n_sample 10000 --batch_size 32 --lr 1e-2 --flip_ratio 0.1 --random_state 1
+# python applications.py --task mislabel_detect --dataset pol --value_type Shapley_Perm --model_type MLP --n_data 200 --n_val 200 --n_repeat 5 --n_sample 10000 --batch_size 32 --lr 1e-2 --flip_ratio 0.1 --random_state 1
+# python applications.py --task weighted_acc --dataset pol --value_type Shapley_Perm --model_type MLP --n_data 200 --n_val 200 --n_repeat 5 --n_sample 10000 --batch_size 32 --lr 1e-2 --flip_ratio 0.1 --random_state 1
 
 
 import argparse
@@ -88,7 +80,7 @@ if args.debug:
 
 u_func = get_weighted_ufunc(dataset, model_type, batch_size, lr, verbose)
 
-x_train, y_train, x_val, y_val = get_processed_data(dataset, n_data, n_val, flip_ratio)
+x_train, y_train, x_val, y_val = get_processed_data(dataset, n_data, n_val=2000, flip_ratio=flip_ratio)
 
 
 if(random_state != -1): 
@@ -160,14 +152,13 @@ if task=='mislabel_detect':
   
   data_lst = np.array(data_lst)
   acc_nocluster, std_nocluster = np.round( np.mean(data_lst[:, 0]), 3), np.round( np.std(data_lst[:, 0]), 3)
-  acc_cluster, std_cluster = np.round( np.mean(data_lst[:, 1]), 3), np.round( np.std(data_lst[:, 1]), 3)
 
   if value_type == 'BetaShapley':
-    print('*** {}_{}_{} {} ({}) {} ({}) ***'.format(value_type, b, a, acc_nocluster, std_nocluster, acc_cluster, std_cluster ))
+    print('*** {}_{}_{} {} ({}) ***'.format(value_type, b, a, acc_nocluster, std_nocluster ))
   elif value_type in ['FixedCard_MC', 'FixedCard_MSR', 'FixedCard_MSRPerm']:
-    print('*** {} card={} {} ({}) {} ({}) ***'.format(value_type, args.card, acc_nocluster, std_nocluster, acc_cluster, std_cluster ))
+    print('*** {} card={} {} ({}) ***'.format(value_type, args.card, acc_nocluster, std_nocluster ))
   else:
-    print('*** {} {} ({}) {} ({}) ***'.format(value_type, acc_nocluster, std_nocluster, acc_cluster, std_cluster ))
+    print('*** {} {} ({}) ***'.format(value_type, acc_nocluster, std_nocluster ))
     
 
 
