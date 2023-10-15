@@ -17,7 +17,7 @@ The code is tested with Python 3.8 and PyTorch 1.12.1. The complete list of requ
 To estimate the data value score of training data points, we need to first sample the performance scores of a learning algorithm trained on different data subsets (where the sampling distribution depends on the specific data values). The following command trains 10,000 MLPs on different subsets of a size-200 Pol dataset from OpenML. `n_repeat' means for each data subset, we train 5 different models on it (with different random seeds for SGD). 
 
 `
-python sample_for_value.py --dataset pol --value_type Banzhaf_GT --model_type MLP --n_data 200 --n_val 200 --n_repeat 5 --n_sample 10,000 --batch_size 32 --flip_ratio 0.1 --random_state 42 --lr 0.01
+python sample_for_value.py --dataset pol --value_type Banzhaf_GT --model_type MLP --n_data 200 --n_val 200 --n_repeat 5 --n_sample 10000 --batch_size 32 --flip_ratio 0.1 --random_state 42 --lr 0.01
 `
 (this takes around 5 CPU hours)
 
